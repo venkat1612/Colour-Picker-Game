@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Color Game</title>
+    <link rel="stylesheet" type="text/css" href="colorPicker.css">
+    <style>
+        h1 {
+            color: white;
+            background-color: steelblue;
+            text-align: center;
+            font-weight: normal;
+            text-transform: uppercase;
+            padding: 20px 0;
+        }
+
+        body {
+            background: #232323;
+            margin: 0;
+            font-family: "arial";
+        }
+
+        #targetColor {
+            font-size: 200%;
+        }
+
+        button {
+            border: none;
+            background-color: white;
+            text-transform: uppercase;
+            height: 100%;
+            font-weight: 700;
+            color: steelblue;
+            letter-spacing: 1px;
+            font-size: inherit;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            color: white;
+            background-color: steelblue;
+        }
+
+        .square {
+            background-color: red;
+            width: 12%;
+            margin: 1.66%;
+            float: left;
+            padding-bottom: 30%;
+            border-radius: 30%;
+            transition: background 0.7s;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        #stripe {
+            text-align: center;
+            background-color: white;
+            padding: auto 0;
+        }
+
+        #message {
+            font-family: "arial";
+            text-transform: uppercase;
+            height: 100%;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: inherit;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Color Picker
+        <br>
+        <span id="targetColor"></span>
+        <br>
+    </h1>
+    <div id="stripe">
+        <button id="NewColor">New Color</button>
+        <span id="message"></span>
+    </div>
+    This will hold the RGB of target color
+    Stripe div will hold the button and
+    message of the game
+    CSS file linked
+    Proprietary content. © Great Learning. All Rights Reserved. Unauthorized use or distribution prohibited.
+    <div class="container">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+    <script>
+        // Number of squares in the palette
+        var noOfSquares = 6;
+
+        // Array to store colors in the palette
+        var arr = [];
+
+        // Color picked as the target
+        var picked;
+
+        // Array to store square elements
+        var squares = document.getElementsByClassName("square");
+
+        // Element displaying the target RGB color
+        var targetColor = document.getElementById("targetColor");
+
+        // Message element for feedback
+        var message = document.getElementById("message");
+
+        // Heading element
+        var head = document.querySelector("h1");
+
+        // Reset button
+        var reset = document.getElementById("NewColor");
+
+        // Initialize the game
+        init();
+
+        // Function to initialize the game
+        function init() {
+            // Generate a random colored palette
+            arr = generateRandomColor(noOfSquares);
+
+            // Get a target color randomly from the array
+            picked = arr[randomPickedColorIndex()];
+
+            // Update the target RGB display
+            targetColor.textContent = picked;
+
+            // Set square colors and add click event listeners
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].style.backgroundColor = arr[i];
+                squares[i].addEventListener("click", squareClickHandler);
+            }
+        }
+
+        // Event handler for square click
+        function squareClickHandler() {
+            if (picked === this.style.backgroundColor) {
+                // Correct color selected
+                message.textContent = "Correct";
+                message.style.color = "green";
+                changeColor(this.style.backgroundColor);
+                reset.textContent = "Play Again?";
+            } else {
+                // Incorrect color selected
+                message.textContent = "Try Again";
+                message.style.color = "red";
+                this.style.backgroundColor = "#232323";
+            }
+        }
+
+        // Event listener for reset button click
+        reset.addEventListener("click", resetIn);
+
+        // Function to generate a random index for picking a color
+        function randomPickedColorIndex() {
+            return Math.floor(Math.random() * arr.length);
+        }
+
+        // Function to generate an array of random colors
+        function generateRandomColor(limit) {
+            var colors = [];
+            for (var i = 0; i < limit; i++) {
+                colors.push(rgbGenerator());
+            }
+            return colors;
+        }
+
+        // Function to generate a random RGB color
+        function rgbGenerator() {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            return "rgb(" + r + ", " + g + ", " + b + ")";
+        }
+
+        // Function to change colors of all squares and the heading
+        function changeColor(color) {
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].style.backgroundColor = color;
+            }
+            head.style.backgroundColor = color;
+        }
+
+        // Function to reset the game
+        function resetIn() {
+            // Generate a new random colored palette
+            arr = generateRandomColor(noOfSquares);
+
+            // Get a new target color randomly from the array
+            picked = arr[randomPickedColorIndex()];
+
+            // Update the target RGB display
+            targetColor.textContent = picked;
+
+            // Reset feedback message
+            message.textContent = "";
+
+            // Reset heading background color
+            head.style.backgroundColor = "steelblue";
+
+            // Set square colors
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].style.backgroundColor = arr[i];
+            }
+
+            // Reset the "Play Again?" text on the button
+            reset.textContent = "New Colors";
+        }
+
+    </script>
+</body>
+
+</html>
